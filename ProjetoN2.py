@@ -144,7 +144,7 @@ while not fim:
                     if saque > 0 and saque <= saldo[0] :
                         novo_saldo1=  saldo[0] - saque
                         saldo[0]=novo_saldo1
-                        saques.append(novo_saldo1)
+                        saques.append(saque)
                        
 
                         print("SAQUE REAIZADO COM SUCESSO")
@@ -155,7 +155,7 @@ while not fim:
                         lmt_credito[0]=novo_saldo2
                         saldo[0]=novo_saldo3
                         saques.append(novo_saldo2)
-                        
+                        saques.append(saque)
                         
 
                         print("SAQUE REAIZADO COM SUCESSO")
