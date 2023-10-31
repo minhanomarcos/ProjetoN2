@@ -261,8 +261,9 @@ while not fim:
     elif op==6:
         print("MACK BANK -- SOBRE")
         print("Este programa foi desenvolvido por")
-        print("MARCOS ANTONIO MINHANO DE CAMPOS ")
-        print("TIA 42399165")
+        print("MARCOS ANTONIO MINHANO DE CAMPOS | TIA: 42399165")
+        print("MATHEUS FERNANDES DOS SANTOS | TIA: 32389371")
+        print("LUIS FELIPE SANTOS DO NASCIMENTO | TIA: 32393059")
         break
     
 
