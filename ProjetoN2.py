@@ -3,16 +3,21 @@ import re
 
 #ARMAZENA TODAS AS INFORMAÇÔES DE CADASTRO:
 cadastro=[]
+
 #Armazena o saldo:
 saldo=[]
+
 #limite de credito:
 lmt_credito=[]
 #deposito
 depositos=[]
+
 #controla os saques:
 saques=[]
+
 #bloqueio das funções 3,4,5:
 contsenha=[]
+
 #validar email
 emails=[]
 
@@ -34,21 +39,24 @@ while not fim:
         def cadastro_cliente():
             #CADASTRO DO CLIENTE:
             num_conta= 5656
+            print(f"NUMERO DA CONTA: {num_conta}")
             #INPUTS PARA RECEBER INFORMAÇÕES DE CADASTRO:
             while len(cadastro) != 6:
                 nome_cliente=input("NOME DO CLIENTE:")
                 telefone=int(input("TELEFONE.......: "))
+
                 def validador_email(email):
                     padrao = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
                     return re.match(padrao,email)
-                email=input("EMAIL..........: ")  
-                if  validador_email(email):
-                    emails.append(email)
-                    
-                else:
-                    print("-----EMAIL INVALIDO-----")
-                    
+                
+                while len(emails)!= 1:
+                    email=input("EMAIL..........: ") 
+                    if  validador_email(email):
+                        emails.append(email)
+                    else:
+                        print("-----EMAIL INVALIDO-----")
 
+                
                 saldo_inicial=float(input("SALDO INICIAL..: "))
                 limite_credito=float(input("LIMITE DE CRÉDITO: "))
                 senha=int(input("SENHA...............: "))
@@ -92,7 +100,7 @@ while not fim:
                     lmt_credito.append(limite_credito)
                     if len(cadastro)==6:
                         print("CADASTRO FINALIZADO")
-                     
+                        break
             input("\n Aperte <enter> para continuar...")    
 
         cadastro_cliente()    
@@ -111,7 +119,7 @@ while not fim:
             novo_saldo=deposito+saldo[0]
             saldo[0]=novo_saldo
             
-            depositos.append(novo_saldo)
+            depositos.append(deposito)
             print("DEPÓSITO REALIZADO COM SUCESSO!")
             
         else:
@@ -144,7 +152,7 @@ while not fim:
                     if saque > 0 and saque <= saldo[0] :
                         novo_saldo1=  saldo[0] - saque
                         saldo[0]=novo_saldo1
-                        saques.append(saque)
+                        saques.append(-saque)
                        
 
                         print("SAQUE REAIZADO COM SUCESSO")
@@ -155,7 +163,7 @@ while not fim:
                         lmt_credito[0]=novo_saldo2
                         saldo[0]=novo_saldo3
                         saques.append(novo_saldo2)
-                        saques.append(saque)
+                        saques.append(-saque)
                         
 
                         print("SAQUE REAIZADO COM SUCESSO")
@@ -217,17 +225,27 @@ while not fim:
                 if senha == cadastro[5] and saldo[0] > 0:
                     print(f"LIMITE DE CRÉDITO: {lmt_credito[0]}")
                     print("------ULTIMAS OPERAÇÔES----:")
-                    if len(depositos) > 0:
-                        print(f"DEPOSITOS:R$ +{depositos}")
-                    print(f"SAQUE:R$ -{saques}")
+                    for i in depositos:
+                        if len(depositos) > 0:
+                            print(f"DEPOSITOS:R$ {i}")
+                   
+                        for i in saques:
+                            if len(saques) > 0:
+                                print(f"SAQUE:R${i}")
+
                     print(f"SALDO EM CONTA:R$ {saldo[0]}")
+
                     input("\n Aperte <enter> para continuar...")
                 elif senha == cadastro[5] and saldo[0]<0 :
                     print(f"LIMITE DE CRÉDITO: {lmt_credito[0]}")
                     print("------ULTIMAS OPERAÇÔES----:")
-                    if len(depositos) > 0:
-                        print(f"DEPOSITOS:R$ +{depositos}")
-                    print(f"SAQUE:R$ -{saques}")
+                    for i in depositos:
+                        if len(depositos) > 0:
+                            print(f"DEPOSITOS:R$ {i}")
+                    for i in saques:
+                        if len(saques) > 0:
+                            print(f"SAQUE:R$ {i}")
+
                     print(f"SAlDO EM CONTA:R$ {saldo[0]}")
                     print(f"-----ATENÇÂO AO SEU SALDO!-----")
                     input("\n Aperte <enter> para continuar...")
