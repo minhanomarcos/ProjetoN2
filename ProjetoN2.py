@@ -1,6 +1,6 @@
 import os
 import re
-
+print("oi")
 #ARMAZENA TODAS AS INFORMAÇÔES DE CADASTRO:
 cadastro=[]
 
