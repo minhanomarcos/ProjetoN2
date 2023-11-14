@@ -1,8 +1,13 @@
 import os
 import re
-print("oi")
-#ARMAZENA TODAS AS INFORMAÇÔES DE CADASTRO:
-cadastro=[]
+import random
+import getpass
+
+#ARMAZENA DADOS BANCÁRIOS
+dados_bancarios=[]
+
+#ARMAZENA NUMERO DA CONTA
+guarda_num = 0
 
 #Armazena o saldo:
 saldo=[]
@@ -18,8 +23,11 @@ saques=[]
 #bloqueio das funções 3,4,5:
 contsenha=[]
 
-#validar email
-emails=[]
+
+#função de validação de email
+def validador_email(email):
+    padrao = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+    return re.match(padrao,email)
 
 
 fim = False
@@ -34,40 +42,39 @@ while not fim:
     print("(6)  FINALIZAR")
     op = int(input("SUA OPÇÃO: "))
     
-    if op==1 and cadastro == [] :
+    if op==1 and dados_bancarios == [] :
         print("MACK BANK - CADASTRO DE CONTA")
         def cadastro_cliente():
             #CADASTRO DO CLIENTE:
-            num_conta= 5656
+            num_conta = random.randint(1000, 9999)
             print(f"NUMERO DA CONTA: {num_conta}")
             #INPUTS PARA RECEBER INFORMAÇÕES DE CADASTRO:
-            while len(cadastro) != 6:
-                nome_cliente=input("NOME DO CLIENTE:")
+            while len(dados_bancarios) != 6:
+                nome_cliente=input("NOME DO CLIENTE: ")
                 telefone=int(input("TELEFONE.......: "))
-
-                def validador_email(email):
-                    padrao = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-                    return re.match(padrao,email)
-                
-                while len(emails)!= 1:
+                #validacao de email
+                email = 0
+                while email == 0:
                     email=input("EMAIL..........: ") 
                     if  validador_email(email):
-                        emails.append(email)
+                        print("\n ----- EMAIL VALIDO -----")
                     else:
-                        print("-----EMAIL INVALIDO-----")
+                        email = 0
+                        print("\n----- EMAIL INVALIDO -----")
+                        print("----- DIGITE NOVAMENTE -----")
 
                 
-                saldo_inicial=float(input("SALDO INICIAL..: "))
+                saldo_inicial=float(input("\nSALDO INICIAL..: "))
                 limite_credito=float(input("LIMITE DE CRÉDITO: "))
-                senha=int(input("SENHA...............: "))
-                vali_senha=int(input("REPITA A SENHA.....: "))
+                senha= int(input("Cadastre uma senha de 6 caracteres: "))
+                vali_senha= int(input("Confirme a senha: "))
 
                 # VALIDADOR DAS INFORMAÇÔES:
-                if nome_cliente == str():
+                if nome_cliente == '' or len(nome_cliente) < 3:
                     print(".......NOME INVALIDO!........")
                     print("\n Aperte <enter> para cadastrar novamente...")    
 
-                elif telefone < 101010101:
+                elif len(str(telefone)) < 9:
                     print(".......TELEFONE INVALIDO!........")
                     input("\n Aperte <enter> para cadastrar novamente...")    
 
@@ -79,7 +86,7 @@ while not fim:
                     print(".......LIMITE DE CREDITO INVALIDO!........")
                     input("\n Aperte <enter> para cadastrar novamente...")    
 
-                elif  senha < 000000 and senha > 000000:
+                elif  len(str(senha)) != 6:
                     print(".......SENHA INVALIDA!........")
                     input("\n Aperte <enter> para cadastrar novamente...")    
 
@@ -89,16 +96,15 @@ while not fim:
 
                 #REGISTRA AS INFORMAÇÔES E FINALIZA O CADASTRO:
                 else:
-                    cadastro.append(num_conta)
-                    cadastro.append(nome_cliente)
-                    cadastro.append(telefone)
-                    cadastro.append(senha)
-                    if len(emails)==1:
-                        cadastro.append(email)
-                    cadastro.append(vali_senha)
+                    dados_bancarios.append(num_conta)
+                    dados_bancarios.append(nome_cliente)
+                    dados_bancarios.append(telefone)
+                    dados_bancarios.append(senha)
+                    dados_bancarios.append(email)
+                    dados_bancarios.append(vali_senha)
                     saldo.append(saldo_inicial)
                     lmt_credito.append(limite_credito)
-                    if len(cadastro)==6:
+                    if len(dados_bancarios)==6:
                         print("CADASTRO FINALIZADO")
                         break
             input("\n Aperte <enter> para continuar...")    
@@ -106,13 +112,14 @@ while not fim:
         cadastro_cliente()    
     
     #Verifica se ja existe uma conta :
-    elif op==2 and  len(cadastro) == 6:
+    elif op==2 and  len(dados_bancarios) == 6:
 
         print("MACK BANK - SAQUE DA CONTA")
-        num_conta=int(input("INFORME O NÚMERO DA CONTA: "))
-       
-        if num_conta==5656:
-            print(f"NOME DO CLIENTE:{cadastro[1]}")
+        num_conta = int(input("INFORME O NÚMERO DA CONTA: "))
+
+        #válida numero da conta
+        if num_conta == dados_bancarios[0]:
+            print(f"NOME DO CLIENTE: {dados_bancarios[1]}")
             deposito=float(input("VALOR DO DEPOSITO: "))
 
             #Soma e substitui o valor do saldo inicial
@@ -127,26 +134,26 @@ while not fim:
         input("\n Aperte <enter> para continuar...")
 
     #Caso o usuário errar a senha 3 vezes essa opção fica bloqueada 
-    elif op== 3 and len(cadastro) == 6 and len(contsenha)!=1:
+    elif op== 3 and len(dados_bancarios) == 6 and len(contsenha)!=1:
         print("MACK BANK - DEPÓSITO EM CONTA")
 
         def sacar():
             num_conta=int(input("INFORME O NÚMERO DA CONTA: "))
 
-            if num_conta==5656:
-                print(f"NOME DO CLIENTE: {cadastro[1]}")
+            if num_conta==dados_bancarios[0]:
+                print(f"NOME DO CLIENTE: {dados_bancarios[1]}")
                 senha=int(input("INFORME A SENHA: "))
                 cont_senha=1
             
-                while cont_senha <3 and  senha != cadastro[5]:
+                while cont_senha <3 and  senha != dados_bancarios[3]:
                     cont_senha+=1
                     senha=int(input("INFORME A SENHA: "))
-                    if cont_senha==3 and senha!=cadastro[5]:
+                    if cont_senha==3 and senha != dados_bancarios[3]:
                         print("BLOQUEADO")
                         contsenha.append(cont_senha)
                         input("\n Aperte <enter> para continuar...")
 
-                if senha == cadastro[5]:
+                if senha == dados_bancarios[3]:
                     saque=float(input("VALOR DO SAQUE:R$ "))
 
                     if saque > 0 and saque <= saldo[0] :
@@ -177,25 +184,25 @@ while not fim:
                 input("\n Aperte <enter> para continuar...")
         sacar()
         
-    elif op == 4 and  len(cadastro) == 6 and len(contsenha)!=1: 
+    elif op == 4 and  len(dados_bancarios) == 6 and len(contsenha)!=1: 
         
         def consulta_saldo():
             num_conta=int(input("INFORME O NÚMERO DA CONTA: "))
 
-            if num_conta==5656:
-                print(f"NOME DO CLIENTE: {cadastro[1]}")
+            if num_conta==dados_bancarios[0]:
+                print(f"NOME DO CLIENTE: {dados_bancarios[1]}")
                 senha=int(input("INFORME A SENHA: "))
                 cont_senha=1
             
-                while cont_senha <3 and  senha != cadastro[5]:
+                while cont_senha <3 and  senha != dados_bancarios[3]:
                     cont_senha+=1
                     senha=int(input("INFORME A SENHA: "))
-                    if cont_senha==3 and senha!=cadastro[5]:
+                    if cont_senha==3 and senha!=dados_bancarios[3]:
                         print("BLOQUEADO")
                         contsenha.append(cont_senha)
                         input("\n Aperte <enter> para continuar...")
         
-                if senha == cadastro[5]:
+                if senha == dados_bancarios[3]:
                     print(f"SALDO EM CONTA:{saldo[0]} ")
                     print(f"LIMITE DE CRÉDITO:{lmt_credito[0]} ")
                     input("\n Aperte <enter> para continuar...")
@@ -205,24 +212,24 @@ while not fim:
 
         consulta_saldo()
     
-    elif op == 5 and len(cadastro) == 6 and len(contsenha)!=1:
+    elif op == 5 and len(dados_bancarios) == 6 and len(contsenha)!=1:
         def consulta_extrato():
             num_conta=int(input("INFORME O NÚMERO DA CONTA: "))
 
-            if num_conta==5656:
-                print(f"NOME DO CLIENTE: {cadastro[1]}")
+            if num_conta==dados_bancarios[0]:
+                print(f"NOME DO CLIENTE: {dados_bancarios[1]}")
                 senha=int(input("INFORME A SENHA: "))
                 cont_senha=1
             
-                while cont_senha <3 and  senha != cadastro[5]:
+                while cont_senha <3 and  senha != dados_bancarios[3]:
                     cont_senha+=1
                     senha=int(input("INFORME A SENHA: "))
-                    if cont_senha==3 and senha!=cadastro[5]:
+                    if cont_senha==3 and senha!=dados_bancarios[3]:
                         print("BLOQUEADO")
                         contsenha.append(cont_senha)
                         input("\n Aperte <enter> para continuar...")
         
-                if senha == cadastro[5] and saldo[0] > 0:
+                if senha == dados_bancarios[3] and saldo[0] > 0:
                     print(f"LIMITE DE CRÉDITO: {lmt_credito[0]}")
                     print("------ULTIMAS OPERAÇÔES----:")
                     for i in depositos:
@@ -236,7 +243,7 @@ while not fim:
                     print(f"SALDO EM CONTA:R$ {saldo[0]}")
 
                     input("\n Aperte <enter> para continuar...")
-                elif senha == cadastro[5] and saldo[0]<0 :
+                elif senha == dados_bancarios[3] and saldo[0]<0 :
                     print(f"LIMITE DE CRÉDITO: {lmt_credito[0]}")
                     print("------ULTIMAS OPERAÇÔES----:")
                     for i in depositos:
@@ -265,6 +272,9 @@ while not fim:
         print("MATHEUS FERNANDES DOS SANTOS | TIA: 32389371")
         print("LUIS FELIPE SANTOS DO NASCIMENTO | TIA: 32393059")
         break
+    
+    else:
+        input("Opção inválida, pressione <enter> para continuar...")
     
 
                 
