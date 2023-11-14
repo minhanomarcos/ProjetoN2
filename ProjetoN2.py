@@ -22,8 +22,18 @@ depositos = []
 saques = []
 
 # bloqueio das funções 3,4,5:
-contsenha = []
+bloqueado = False
 
+# define our clear function
+def clear():
+ 
+    # for windows
+    if os.name == 'nt':
+        os.system('cls')
+ 
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        os.system('clear')
 
 # função de validação de email
 def validador_email(email):
@@ -72,13 +82,28 @@ def input_com_validacao_customizada(mensagem, func_validacao, password=False):
     valor = valida_input(mensagem, password)
 
     while not func_validacao(valor):
+        print("=== Inválido ===")
         valor = valida_input(mensagem, password)
 
     return valor
 
+def valida_senha(senha_correta):
+    cont_senha = 1
+    senha = input_com_validacao_customizada("INFORME A SENHA: ", lambda v: len(str(v)) == 6, password=True)
+
+    while cont_senha < 3 and senha != senha_correta:
+        cont_senha += 1
+        senha = input_com_validacao_customizada("INFORME A SENHA: ", lambda v: len(str(v)) == 6, password=True)
+        if cont_senha == 3 and senha != senha_correta:
+            print("BLOQUEADO")
+            global bloqueado
+            bloqueado = True
+            input("\n Aperte <enter> para continuar...")
+            return False
+
+    return True
+
 # função cadastro de cliente
-
-
 def cadastro_cliente():
     # CADASTRO DO CLIENTE:
     num_conta = random.randint(1000, 9999)
@@ -111,6 +136,7 @@ def cadastro_cliente():
         if len(dados_bancarios) == 6:
             print("CADASTRO FINALIZADO")
             break
+
     input("\n Aperte <enter> para continuar...")
 
 # função para sacar
@@ -121,18 +147,9 @@ def sacar():
 
     if num_conta == dados_bancarios[0]:
         print(f"NOME DO CLIENTE: {dados_bancarios[1]}")
-        senha = int(input("INFORME A SENHA: "))
-        cont_senha = 1
+        senha_valida = valida_senha(dados_bancarios[3])
 
-        while cont_senha < 3 and senha != dados_bancarios[3]:
-            cont_senha += 1
-            senha = int(input("INFORME A SENHA: "))
-            if cont_senha == 3 and senha != dados_bancarios[3]:
-                print("BLOQUEADO")
-                contsenha.append(cont_senha)
-                input("\n Aperte <enter> para continuar...")
-
-        if senha == dados_bancarios[3]:
+        if senha_valida:
             saque = float(input("VALOR DO SAQUE:R$ "))
 
             if saque > 0 and saque <= saldo[0]:
@@ -168,18 +185,9 @@ def consulta_saldo():
 
     if num_conta == dados_bancarios[0]:
         print(f"NOME DO CLIENTE: {dados_bancarios[1]}")
-        senha = int(input("INFORME A SENHA: "))
-        cont_senha = 1
+        senha_valida = valida_senha(dados_bancarios[3])
 
-        while cont_senha < 3 and senha != dados_bancarios[3]:
-            cont_senha += 1
-            senha = int(input("INFORME A SENHA: "))
-            if cont_senha == 3 and senha != dados_bancarios[3]:
-                print("BLOQUEADO")
-                contsenha.append(cont_senha)
-                input("\n Aperte <enter> para continuar...")
-
-        if senha == dados_bancarios[3]:
+        if senha_valida:
             print(f"SALDO EM CONTA:{saldo[0]} ")
             print(f"LIMITE DE CRÉDITO:{lmt_credito[0]} ")
             input("\n Aperte <enter> para continuar...")
@@ -195,18 +203,9 @@ def consulta_extrato():
 
     if num_conta == dados_bancarios[0]:
         print(f"NOME DO CLIENTE: {dados_bancarios[1]}")
-        senha = int(input("INFORME A SENHA: "))
-        cont_senha = 1
+        senha_valida = valida_senha(dados_bancarios[3])
 
-        while cont_senha < 3 and senha != dados_bancarios[3]:
-            cont_senha += 1
-            senha = int(input("INFORME A SENHA: "))
-            if cont_senha == 3 and senha != dados_bancarios[3]:
-                print("BLOQUEADO")
-                contsenha.append(cont_senha)
-                input("\n Aperte <enter> para continuar...")
-
-        if senha == dados_bancarios[3] and saldo[0] > 0:
+        if senha_valida and saldo[0] > 0:
             print(f"LIMITE DE CRÉDITO: {lmt_credito[0]}")
             print("------ULTIMAS OPERAÇÔES----:")
             for i in depositos:
@@ -219,7 +218,7 @@ def consulta_extrato():
             print(f"SALDO EM CONTA:R$ {saldo[0]}")
 
             input("\n Aperte <enter> para continuar...")
-        elif senha == dados_bancarios[3] and saldo[0] < 0:
+        elif senha_valida and saldo[0] < 0:
             print(f"LIMITE DE CRÉDITO: {lmt_credito[0]}")
             print("------ULTIMAS OPERAÇÔES----:")
             for i in depositos:
@@ -240,14 +239,37 @@ def consulta_extrato():
 
 fim = False
 while not fim:
-    os.system("Cls")
-    print("----------:: MACK BANK - ESCOLHA UMA OPÇÃO::----------")
-    print("(1)  CADASTRAR CONTA CORRENTE")
-    print("(2)  DEPOSITAR")
-    print("(3)  SACAR")
-    print("(4)  CONSULTAR SALDO")
-    print("(5)  CONSULTAR EXTRATO")
-    print("(6)  FINALIZAR")
+    clear()
+    print(f"""
+                           
+                                *@@@@@@@@@@@#             
+                            @@@@@@@@@@@@@@@@@@@@@,        
+                        @@@@@@               @@@@@@      
+                        @@@@@                     @@@@@    
+                        @@@@    @@@@@       @@@@@%   @@@@%  
+                    @@@@     @@@@@@     @@@@@@.    @@@@* 
+                    @@@@       @@@@@@   @@@@@@       @@@@ 
+                    @@@@       @@@ @@@ @@@ @@@       @@@@ 
+                    @@@@       @@@  @@@@@, @@@       @@@@ 
+                    @@@@     ,@@@,  @@@(  @@@@     @@@@* 
+                        @@@@    @@@@@   @%  @@@@@%   @@@@%  
+                        @@@@@                     @@@@@    
+                        @@@@@@               @@@@@@      
+                            @@@@@@@@@@@@@@@@@@@@@/        
+                                *@@@@@@@@@@@#             
+
+              
+                ================= MACK BANK =================
+                ||                                         ||
+                ||  1. CADASTRAR CONTA CORRENTE            ||
+                ||  2. DEPOSITAR                           ||
+                ||  3. SACAR                               ||
+                ||  4. CONSULTAR SALDO                     ||
+                ||  5. CONSULTAR EXTRATO                   ||
+                ||  6. FINALIZAR                           ||
+                ||                                         ||
+                =============================================
+""")
     op = int(input("SUA OPÇÃO: "))
 
     if op == 1 and dados_bancarios == []:
@@ -277,14 +299,14 @@ while not fim:
         input("\n Aperte <enter> para continuar...")
 
     # Caso o usuário errar a senha 3 vezes essa opção fica bloqueada
-    elif op == 3 and len(dados_bancarios) == 6 and len(contsenha) != 1:
+    elif op == 3 and len(dados_bancarios) == 6 and not bloqueado:
         print("MACK BANK - DEPÓSITO EM CONTA")
         sacar()
 
-    elif op == 4 and len(dados_bancarios) == 6 and len(contsenha) != 1:
+    elif op == 4 and len(dados_bancarios) == 6 and not bloqueado:
         consulta_saldo()
 
-    elif op == 5 and len(dados_bancarios) == 6 and len(contsenha) != 1:
+    elif op == 5 and len(dados_bancarios) == 6 and not bloqueado:
         consulta_extrato()
 
     elif op == 6:
