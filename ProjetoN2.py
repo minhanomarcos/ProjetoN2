@@ -21,16 +21,19 @@ depositos = []
 # controla os saques:
 saques = []
 
+# controla o extrato
+extrato = []
+
 # bloqueio das funções 3,4,5:
 bloqueado = False
 
 # define our clear function
 def clear():
- 
+
     # for windows
     if os.name == 'nt':
         os.system('cls')
- 
+
     # for mac and linux(here, os.name is 'posix')
     else:
         os.system('clear')
@@ -140,8 +143,6 @@ def cadastro_cliente():
     input("\n Aperte <enter> para continuar...")
 
 # função para sacar
-
-
 def sacar():
     num_conta = int(input("INFORME O NÚMERO DA CONTA: "))
 
@@ -156,6 +157,7 @@ def sacar():
                 novo_saldo1 = saldo[0] - saque
                 saldo[0] = novo_saldo1
                 saques.append(-saque)
+                extrato.append(-saque)
 
                 print("SAQUE REAIZADO COM SUCESSO")
                 input("\n Aperte <enter> para continuar...")
@@ -166,6 +168,7 @@ def sacar():
                 saldo[0] = novo_saldo3
                 saques.append(novo_saldo2)
                 saques.append(-saque)
+                extrato.append(-saque)
 
                 print("SAQUE REAIZADO COM SUCESSO")
                 print("VOCÊ ESTA USANDO SEU LIMITE DE CRÉDITO")
@@ -176,6 +179,19 @@ def sacar():
     else:
         print("NUMERO DA CONTA ERRADO")
         input("\n Aperte <enter> para continuar...")
+
+#função de depósito
+def deposito():
+    print(f"NOME DO CLIENTE: {dados_bancarios[1]}")
+    deposito = float(input("VALOR DO DEPOSITO: "))
+
+    # Soma e substitui o valor do saldo inicial
+    novo_saldo = deposito+saldo[0]
+    saldo[0] = novo_saldo
+
+    depositos.append(deposito)
+    extrato.append(deposito)
+    print("DEPÓSITO REALIZADO COM SUCESSO!")
 
 # função consulta saldo
 
@@ -188,8 +204,8 @@ def consulta_saldo():
         senha_valida = valida_senha(dados_bancarios[3])
 
         if senha_valida:
-            print(f"SALDO EM CONTA:{saldo[0]} ")
-            print(f"LIMITE DE CRÉDITO:{lmt_credito[0]} ")
+            print(f"SALDO EM CONTA:{saldo[0]:.2f} ")
+            print(f"LIMITE DE CRÉDITO:{lmt_credito[0]:.2f} ")
             input("\n Aperte <enter> para continuar...")
     else:
         print("NUMERO DA CONTA ERRADO")
@@ -206,29 +222,31 @@ def consulta_extrato():
         senha_valida = valida_senha(dados_bancarios[3])
 
         if senha_valida and saldo[0] > 0:
-            print(f"LIMITE DE CRÉDITO: {lmt_credito[0]}")
+            print(f"LIMITE DE CRÉDITO: {lmt_credito[0]:.2f}")
             print("------ULTIMAS OPERAÇÔES----:")
-            for i in depositos:
-                if len(depositos) > 0:
-                    print(f"DEPOSITOS:R$ {i}")
-            for i in saques:
-                if len(saques) > 0:
-                    print(f"SAQUE:R${i}")
-
-            print(f"SALDO EM CONTA:R$ {saldo[0]}")
-
+            if len(extrato) > 0:
+                for i in extrato:
+                    if i > 0:
+                        print(f"DEPOSITO: R$ {i:.2f}")
+                    else:
+                        print(f"SAQUE: R$ {i:.2f}")
+            else: 
+                print("Não há operações de depósitos ou saques!")
+            print(f"SALDO EM CONTA:R$ {saldo[0]:.2f}")
             input("\n Aperte <enter> para continuar...")
         elif senha_valida and saldo[0] < 0:
-            print(f"LIMITE DE CRÉDITO: {lmt_credito[0]}")
+            print(f"LIMITE DE CRÉDITO: {lmt_credito[0]:.2f}")
             print("------ULTIMAS OPERAÇÔES----:")
-            for i in depositos:
-                if len(depositos) > 0:
-                    print(f"DEPOSITOS:R$ {i}")
-            for i in saques:
-                if len(saques) > 0:
-                    print(f"SAQUE:R$ {i}")
+            if len(extrato) > 0:
+                for i in extrato:
+                    if i > 0:
+                        print(f"DEPOSITO: R$ {i:.2f}")
+                    else:
+                        print(f"SAQUE: R$ {i:.2f}")
+            else: 
+                print("Não há operações de depósitos ou saques!")
 
-            print(f"SAlDO EM CONTA:R$ {saldo[0]}")
+            print(f"SAlDO EM CONTA:R$ {saldo[0]:.2f}")
             print(f"-----ATENÇÂO AO SEU SALDO!-----")
             input("\n Aperte <enter> para continuar...")
 
@@ -286,16 +304,7 @@ while not fim:
 
         # válida numero da conta
         if num_conta == dados_bancarios[0]:
-            print(f"NOME DO CLIENTE: {dados_bancarios[1]}")
-            deposito = float(input("VALOR DO DEPOSITO: "))
-
-            # Soma e substitui o valor do saldo inicial
-            novo_saldo = deposito+saldo[0]
-            saldo[0] = novo_saldo
-
-            depositos.append(deposito)
-            print("DEPÓSITO REALIZADO COM SUCESSO!")
-
+            deposito()
         else:
             print("NUMERO DA CONTA INVÁLIDO")
         input("\n Aperte <enter> para continuar...")
