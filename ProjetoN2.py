@@ -211,9 +211,9 @@ def consulta_extrato():
             for i in depositos:
                 if len(depositos) > 0:
                     print(f"DEPOSITOS:R$ {i}")
-                for i in saques:
-                    if len(saques) > 0:
-                        print(f"SAQUE:R${i}")
+            for i in saques:
+                if len(saques) > 0:
+                    print(f"SAQUE:R${i}")
 
             print(f"SALDO EM CONTA:R$ {saldo[0]}")
 
@@ -270,6 +270,8 @@ while not fim:
                 ||                                         ||
                 =============================================
 """)
+    if dados_bancarios != []:
+        print("Número da conta: ", dados_bancarios[0])
     op = int(input("SUA OPÇÃO: "))
 
     if op == 1 and dados_bancarios == []:
@@ -279,7 +281,7 @@ while not fim:
     # Verifica se ja existe uma conta :
     elif op == 2 and len(dados_bancarios) == 6:
 
-        print("MACK BANK - SAQUE DA CONTA")
+        print("MACK BANK - DEPÓSITO NA CONTA")
         num_conta = int(input("INFORME O NÚMERO DA CONTA: "))
 
         # válida numero da conta
@@ -300,7 +302,7 @@ while not fim:
 
     # Caso o usuário errar a senha 3 vezes essa opção fica bloqueada
     elif op == 3 and len(dados_bancarios) == 6 and not bloqueado:
-        print("MACK BANK - DEPÓSITO EM CONTA")
+        print("MACK BANK - SAQUE DA CONTA")
         sacar()
 
     elif op == 4 and len(dados_bancarios) == 6 and not bloqueado:
