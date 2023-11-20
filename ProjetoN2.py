@@ -276,7 +276,8 @@ while not fim:
                             @@@@@@@@@@@@@@@@@@@@@/        
                                 *@@@@@@@@@@@#             
 
-              
+                                 {f"Conta: {dados_bancarios[0]}" if dados_bancarios != [] else ""}
+
                 ================= MACK BANK =================
                 ||                                         ||
                 ||  1. CADASTRAR CONTA CORRENTE            ||
@@ -288,8 +289,6 @@ while not fim:
                 ||                                         ||
                 =============================================
 """)
-    if dados_bancarios != []:
-        print("Número da conta: ", dados_bancarios[0])
     op = int(input("SUA OPÇÃO: "))
 
     if op == 1 and dados_bancarios == []:
