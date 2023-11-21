@@ -93,11 +93,11 @@ def input_com_validacao_customizada(mensagem, func_validacao, password=False):
 
 def valida_senha(senha_correta):
     cont_senha = 1
-    senha = input_com_validacao_customizada("INFORME A SENHA: ", lambda v: len(str(v)) == 6, password=True)
+    senha = input_com_validacao_customizada("INFORME A SENHA: ", password=True)
 
     while cont_senha < 3 and senha != senha_correta:
         cont_senha += 1
-        senha = input_com_validacao_customizada("INFORME A SENHA: ", lambda v: len(str(v)) == 6, password=True)
+        senha = input_com_validacao_customizada("INFORME A SENHA: ", password=True)
         if cont_senha == 3 and senha != senha_correta:
             print("BLOQUEADO")
             global bloqueado
